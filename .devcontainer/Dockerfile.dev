@@ -1,0 +1,13 @@
+ARG VARIANT=3-bullseye
+FROM mcr.microsoft.com/vscode/devcontainers/python:${VARIANT}
+
+WORKDIR auto-trade
+
+RUN /usr/local/bin/python -m pip install --upgrade pip
+COPY ./requirements.txt ./requirements.txt
+RUN pip install -r requirements.txt
+
+COPY auto_trade ./
+
+ARG NODE_VERSION="none"
+RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
